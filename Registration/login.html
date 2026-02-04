@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <style>
+        .header-banner {
+            background-color: #397ed8;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 80px;
+            border: 2px solid #2868a3;
+            box-shadow: 0 4px 10px rgba(182, 110, 110, 0.1);
+        }
+        body {
+            background-color: #9ed7db;
+            font-family: Arial, sans-serif;
+            margin: 20px;   
+            padding: 20px;
+        }
+
+        div {
+            margin-left: 20px;
+            margin-top: 20px;
+
+        }
+        input {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 2px solid #5c88e6;
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
+        .main-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .submit {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .gender {
+            input[type="radio"] {
+                width: auto;
+                margin-right: 10px;
+                vertical-align: middle; 
+            }
+        }
+    </style>
+   
+   
+</head>
+
+
+<body >
+
+    <div class="main-container"> <div class="header-banner">
+        <h1>Registration</h1>
+    </div>device-width
+
+    <div class="form-content">
+        <table>
+            <tr>
+                <td align="left">
+                    <label for="fname">First Name:</label> <br>
+                    <input type="text" id="fname" placeholder="First Name" </td>
+                <td align="left">
+                    <label for="lname">Last Name:</label> <br>
+                    <input type="text" id="lname" placeholder="Last Name">
+          
+
+            </tr>
+            device-width
+
+        </table>
+        <label for="gender">Gender:</label> <br>
+        <div class="gender">
+            <label class="gender-option">
+                <input type="radio" name="gender" value="   male"> Male
+            </label>
+            <label class="gender-option">
+                <input type="radio" name ="gender" value="female"> Female
+        </div>
+
+
+        <label for="email">Email/Phone Number:</label> <br>
+        <input type="text" id="email" placeholder="Email/Phone Number">
+        <br>
+
+        <label for="Company">Company:</label> <br>
+        <input type="text" id="company" placeholder="Company">
+        <br>
+
+        <label for="Physical">Address:</label> <br>
+        <input type="text" id="address" placeholder="Street Number"> <br>
+        <input type="text" id="address" placeholder="House Number"> <br>
+        <input type="text" id="address" placeholder="City"> <br>
+
+        <label for="cdevice-widthountry">Country:</label> <br>
+        <input type="text" id="country" placeholder="Country">
+        <br>
+
+        <label for="Dob">Date of Birth:</label> <br>
+        <input type="date" id="dob" name="dob">
+    </div>
+
+    <div>
+        <div class="submit">
+            <button type="submit" style=" 
+                background-color: #397ed8;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                box-shadow: 0 4px 10px rgba(56, 97, 173, 0.2);
+            ">Submit</button>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
