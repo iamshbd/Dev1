@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <h1> Leap year</h1> 
+
+    <button onclick="checkLeapYear()">click here</button>
+
+
+    <p id="ex1"></p>
+    <script>
+        function checkLeapYear(){
+             
+            let year = prompt("Enter LeapYear:");
+
+            let message;
+
+            if (year == null || year == "") {
+                message = "Invalid!";
+
+            } else {
+                year = Number(year);
+
+                if ((year % 4 === 0 && year >=2000)) {
+                    message = year + "is a LeapYear!";
+
+                } else {
+                    message = year + "is not a LeapYear";
+                }
+            }
+
+            document.getElementById("ex1").innerHTML = message;
+
+        }
+        
+    </script>
+
+    <h1>Array to String</h1>
+  <p id="ex2"> </p>
+
+  <script>
+    const iColor = ["Black", "Gray", "Green", "White"];
+    let result = "";
+
+    for (let i = 0; i < iColor.length; i++) {
+      result += iColor[i];
+
+      if (i < iColor.length - 1) {
+        result += ",";
+      }
+    }
+
+    document.getElementById("ex2").innerHTML = result;
+  </script>
+
+
+
+    <h1 id="greeting"></h1>
+    <p id="ex3"></p>
+
+    <script>
+        
+        function greeting() {
+            const d = new Date();
+            const timeString = d.toLocaleTimeString();
+
+            let hour = d.getHours();
+
+            let message;
+
+            if (hour < 12) {
+                message = "Good Morningg";
+            } else if (hour < 18) {
+                message = "Good Afternoon";
+            } else {
+                message = "Good Everning"
+            }
+            document.getElementById("greeting").innerHTML = message + "!";
+            document.getElementById("ex3").innerHTML = "Current Time:" + timeString;
+        }
+        const mytime = setInterval(greeting, 1000)
+
+
+    </script>
+
+    <h1>Caesar Cipher Lab</h1>
+    <p id="ex4"></p>
+
+    <script>
+        function caesar(str, shift, decrypt = false) {
+            let result = "";
+             
+            if (decrypt) shift = (26 - (shift % 26)) % 26;
+
+            for (let i = 0; 1 < str.length; i++) {
+                let char = str[i];
+
+                if (char.match(/[A-Z]/)) {
+                    let code = ((char.charCodeAt(0)-65+shift) % 26) + 65;
+                    result += String.fromCharCode(code);
+                } else if (char.match(/[a-z]/)) {
+                    let code = ((char.charCodeAt(0)-97+shift) % 26) + 97;
+                    result += String.fromCharCode(code);
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        let originalText = "Hello!";
+        let shiftValue = 3;
+
+        let encrypted = caesar(originalText, shiftValue);
+
+        let decrypt = caesar(encrypted, shiftValue, true);
+
+        document.getElementById("ex4").innerHTML =
+        "Original: " + originalText + "<br>" +
+        "Encrypted: " + encrypted + "<br>" +
+        "Decrypted: " + decrypted;
+    </script>
+
+
+    
+</body>
+</html>

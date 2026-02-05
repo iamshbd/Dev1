@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Caesar Cipher Lab</h2>
+  <p id="output"></p>
+
+  <script>
+    function caesarCipher(str, shift, decrypt = false) {
+      let result = "";
+      
+      // If decrypting, we move backwards
+      if (decrypt) shift = (26 - (shift % 26)) % 26;
+
+      for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+
+        // Encrypt uppercase letters
+        if (char.match(/[A-Z]/)) {
+          let code = ((char.charCodeAt(0) - 65 + shift) % 26) + 65;
+          result += String.fromCharCode(code);
+        }
+        // Encrypt lowercase letters
+        else if (char.match(/[a-z]/)) {
+          let code = ((char.charCodeAt(0) - 97 + shift) % 26) + 97;
+          result += String.fromCharCode(code);
+        }
+        // Keep punctuation/spaces as they are
+        else {
+          result += char;
+        }
+      }
+      return result;
+    }
+
+    // Testing the Examples from your prompt
+    let originalText = "Hello world!";
+    let shiftValue = 3;
+
+    // 1. Encrypt
+    let encrypted = caesarCipher(originalText, shiftValue);
+    
+    // 2. Decrypt
+    let decrypted = caesarCipher(encrypted, shiftValue, true);
+
+    document.getElementById("output").innerHTML = 
+      "Original: " + originalText + "<br>" +
+      "Encrypted: " + encrypted + "<br>" +
+      "Decrypted: " + decrypted;
+  </script>
+</body>
+</html>
