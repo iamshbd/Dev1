@@ -1,111 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>JavaScript Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
 
+<body class="bg-gray-100 p-8">
 
-    <h1> Leap year</h1> 
+    <h1 class="text-2xl font-bold mb-4">Leap Year Checker</h1>
+    <button onclick="checkLeapYear()" class="btn btn-primary mb-4">Check Leap Year</button>
+    <p id="ex1" class="text-lg"></p>
 
-    <button onclick="checkLeapYear()">click here</button>
-
-
-    <p id="ex1"></p>
     <script>
-        function checkLeapYear(){
-             
-            let year = prompt("Enter LeapYear:");
-
+        function checkLeapYear() {
+            let year = prompt("Enter a year:");
             let message;
 
             if (year == null || year == "") {
                 message = "Invalid!";
-
             } else {
                 year = Number(year);
-
-                if ((year % 4 === 0 && year >=2000)) {
-                    message = year + "is a LeapYear!";
-
+                if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
+                    message = year + " is a Leap Year!";
                 } else {
-                    message = year + "is not a LeapYear";
+                    message = year + " is not a Leap Year.";
                 }
             }
-
             document.getElementById("ex1").innerHTML = message;
-
         }
-        
     </script>
 
-    <h1>Array to String</h1>
-  <p id="ex2"> </p>
-
-  <script>
-    const iColor = ["Black", "Gray", "Green", "White"];
-    let result = "";
-
-    for (let i = 0; i < iColor.length; i++) {
-      result += iColor[i];
-
-      if (i < iColor.length - 1) {
-        result += ",";
-      }
-    }
-
-    document.getElementById("ex2").innerHTML = result;
-  </script>
-
-
-
-    <h1 id="greeting"></h1>
-    <p id="ex3"></p>
+    <h1 class="text-2xl font-bold mb-4">Array to String</h1>
+    <p id="ex2" class="text-lg mb-4"></p>
 
     <script>
-        
+        const iColor = ["Black", "Gray", "Green", "White"];
+        let result = "";
+
+        for (let i = 0; i < iColor.length; i++) {
+            result += iColor[i];
+            if (i < iColor.length - 1) {
+                result += ",";
+            }
+        }
+        document.getElementById("ex2").innerHTML = result;
+    </script>
+
+    <h1 class="text-2xl font-bold mb-4">Greeting Based on Time</h1>
+    <h2 id="greeting" class="text-lg mb-2"></h2>
+    <p id="ex3" class="text-lg"></p>
+
+    <script>
         function greeting() {
             const d = new Date();
             const timeString = d.toLocaleTimeString();
 
             let hour = d.getHours();
-
             let message;
 
             if (hour < 12) {
-                message = "Good Morningg";
+                message = "Good Morning!";
             } else if (hour < 18) {
-                message = "Good Afternoon";
+                message = "Good Afternoon!";
             } else {
-                message = "Good Everning"
+                message = "Good Evening!";
             }
-            document.getElementById("greeting").innerHTML = message + "!";
-            document.getElementById("ex3").innerHTML = "Current Time:" + timeString;
+            document.getElementById("greeting").innerHTML = message;
+            document.getElementById("ex3").innerHTML = "Current Time: " + timeString;
         }
-        const mytime = setInterval(greeting, 1000)
 
-
+        greeting(); // Call to greet user on load
+        setInterval(greeting, 1000); // Update greeting every second
     </script>
 
-    <h1>Caesar Cipher Lab</h1>
-    <p id="ex4"></p>
+    <h1 class="text-2xl font-bold mb-4">Caesar Cipher Lab</h1>
+    <p id="ex4" class="text-lg mb-2"></p>
 
+    <input type="text" id="cipherInput" placeholder="Enter text for Caesar Cipher" class="input input-bordered mb-4" />
+    <input type="number" id="shiftValue" placeholder="Enter shift value" class="input input-bordered mb-4" />
+    <button onclick="encryptText()" class="btn btn-primary">Encrypt</button>
+    <button onclick="decryptText()" class="btn btn-secondary ml-2">Decrypt</button>
+    
     <script>
         function caesar(str, shift, decrypt = false) {
             let result = "";
-             
             if (decrypt) shift = (26 - (shift % 26)) % 26;
 
-            for (let i = 0; 1 < str.length; i++) {
+            for (let i = 0; i < str.length; i++) {
                 let char = str[i];
-
                 if (char.match(/[A-Z]/)) {
-                    let code = ((char.charCodeAt(0)-65+shift) % 26) + 65;
+                    let code = ((char.charCodeAt(0) - 65 + shift) % 26) + 65;
                     result += String.fromCharCode(code);
                 } else if (char.match(/[a-z]/)) {
-                    let code = ((char.charCodeAt(0)-97+shift) % 26) + 97;
+                    let code = ((char.charCodeAt(0) - 97 + shift) % 26) + 97;
                     result += String.fromCharCode(code);
                 } else {
                     result += char;
@@ -114,20 +104,20 @@
             return result;
         }
 
-        let originalText = "Hello!";
-        let shiftValue = 3;
+        function encryptText() {
+            const text = document.getElementById("cipherInput").value;
+            const shift = Number(document.getElementById("shiftValue").value);
+            const encrypted = caesar(text, shift);
+            document.getElementById("ex4").textContent = "Encrypted: " + encrypted;
+        }
 
-        let encrypted = caesar(originalText, shiftValue);
-
-        let decrypt = caesar(encrypted, shiftValue, true);
-
-        document.getElementById("ex4").innerHTML =
-        "Original: " + originalText + "<br>" +
-        "Encrypted: " + encrypted + "<br>" +
-        "Decrypted: " + decrypted;
+        function decryptText() {
+            const text = document.getElementById("cipherInput").value;
+            const shift = Number(document.getElementById("shiftValue").value);
+            const decrypted = caesar(text, shift, true);
+            document.getElementById("ex4").textContent += "\nDecrypted: " + decrypted;
+        }
     </script>
 
-
-    
 </body>
 </html>
