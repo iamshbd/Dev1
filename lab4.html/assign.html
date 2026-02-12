@@ -13,6 +13,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100">
 
     <header class="bg-blue-600 p-6">
@@ -20,6 +21,17 @@
         <nav class="mt-4">
             <a href="#features" class="text-white hover:underline">Features</a>
             <a href="#contact" class="ml-4 text-white hover:underline">Contact</a>
+            <a href="#" onclick="goToFacebook(); return false;" class="text-orange-600 hover:text-orange-800 font-medium underline underline-offset-2">
+                    Facebook
+                </a>
+            <script>
+                function goToFacebook() {
+                    const windowObj = window.open("https://www.facebook.com", "_blank");
+                    setTimeout(() => {
+                        windowObj.location.replace("http://127.0.0.1:5500/Dev1/lab4.html/assign.html#contact")
+                    }, 5000);
+                }
+            </script>
         </nav>
     </header>
 
@@ -53,6 +65,8 @@
     <footer class="bg-gray-800 p-6 text-center text-white">
         <p>© 2026 E-Walker</p>
     </footer>
+
+    
 
 </body>
 </html>
