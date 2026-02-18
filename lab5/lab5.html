@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Selector</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen flex items-center justify-center p-6">
+
+    <div class="card bg-base-100 shadow-xl max-w-lg w-full p-8">
+
+
+        <h1 class="text-3xl font-bold mb-8 text-primary text-center">Location Selector</h1>
+        
+        <form id="locationForm" class="space-y-6">
+            <div class="form-control">
+                <label class="label">
+
+                    <span class="label-text font-medium">Province</span>
+                </label>
+                <select id="province" class="select select-bordered w-full">
+                    <option disabled selected>Select Province</option>
+                </select>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">District</span>
+                </label>
+                <select id="district" class="select select-bordered w-full" disabled>
+                    <option disabled selected>Select District</option>
+
+
+                </select>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">Commune</span>
+                </label>
+                <select id="commune" class="select select-bordered w-full" disabled>
+
+
+                    <option disabled selected>Select Commune</option>
+                </select>
+
+
+
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">Village</span>
+                </label>
+                <select id="village" class="select select-bordered w-full" disabled>
+                    <option disabled selected>Select Village</option>
+
+                </select>
+
+            </div>
+
+            <div class="flex justify-end gap-4 mt-6">
+                <button type="submit" class="btn btn-primary px-8">Submit</button>
+                <button type="button" id="resetBtn" class="btn btn-outline">Reset</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = 'https://corsproxy.io/?https://cambo-gazetteer.manethpak.dev/api/v1';
+
+        const provinceSelect = document.getElementById('province');
+
+        const districtSelect  = document.getElementById('district');
+        const communeSelect   = document.getElementById('commune');
+        const villageSelect   = document.getElementById('village');
+        const resetBtn        = document.getElementById('resetBtn');
+
+        async function fetchAndPopulate(select, url) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Network response was not ok');
+
+
+                const { data } = await res.json();  // API wraps in { data: [...] }
+
+                select.innerHTML = `<option disabled selected>Select ${select.id.charAt(0).toUpperCase() + select.id.slice(1)}</option>`;
+
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.code;
+                    option.textContent = `${item.name_en} (${item.name_km})`;
+                    select.appendChild(option);
+                });
+
+                select.disabled = false;
+            } catch (err) {
+                console.error('Fetch error:', err);
+            }
+        }
+
+        function resetLowerSelects(level = 1) {
+            if (level <= 1) {
+                districtSelect.innerHTML = '<option disabled selected>Select District</option>';
+                districtSelect.disabled = true;
+            }
+            if (level <= 2) {
+                communeSelect.innerHTML = '<option disabled selected>Select Commune</option>';
+                communeSelect.disabled = true;
+            }
+            if (level <= 3) {
+                villageSelect.innerHTML = '<option disabled selected>Select Village</option>';
+                villageSelect.disabled = true;
+            }
+        }
+
+        // Load provinces
+        fetchAndPopulate(provinceSelect, `${API_BASE}/provinces`);
+
+        provinceSelect.addEventListener('change', () => {
+            resetLowerSelects(1);
+            const code = provinceSelect.value;
+            if (code) fetchAndPopulate(districtSelect, `${API_BASE}/districts?province=${code}`);
+
+
+        });
+
+        districtSelect.addEventListener('change', () => {
+            resetLowerSelects(2);
+            const code = districtSelect.value;
+            if (code) fetchAndPopulate(communeSelect, `${API_BASE}/communes?district=${code}`);
+
+
+        });
+
+        communeSelect.addEventListener('change', () => {
+            resetLowerSelects(3);
+            const code = communeSelect.value;
+            if (code) fetchAndPopulate(villageSelect, `${API_BASE}/villages?commune=${code}`);
+
+
+        });
+
+        // Reset everything
+        resetBtn.addEventListener('click', () => {
+            provinceSelect.selectedIndex = 0;
+            resetLowerSelects(1);
+        });
+
+        
+        document.getElementById('locationForm').addEventListener('submit', e => {
+
+
+            e.preventDefault();
+            const values = {
+                province: provinceSelect.value,
+                district:  districtSelect.value,
+                commune:   communeSelect.value,
+                village:   villageSelect.value
+            };
+            console.log('Selected:', values);
+            alert('Submitted!\nCheck console for values.');
+
+        });
+    </script>
+
+    
+</body>
+</html>
