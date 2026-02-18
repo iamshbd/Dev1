@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabnapping Demo – Scenario A (Educational Only)</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #2c3e50;
+    }
+    .page {
+      display: none;
+      padding: 4rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .page.active {
+      display: block;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .link {
+      display: inline-block;
+      margin: 1.5rem 0;
+      padding: 0.9rem 1.8rem;
+      background: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .warning {
+      color: #e74c3c;
+      font-weight: bold;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: #ffebee;
+      border-left: 5px solid #e74c3c;
+    }
+    .note {
+      margin-top: 3rem;
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    #pageC .card {
+      text-align: center;
+    }
+    #pageC input {
+      display: block;
+      width: 100%;
+      max-width: 360px;
+      margin: 1rem auto;
+      padding: 0.9rem;
+      font-size: 1rem;
+      border: 1px solid #bdc3c7;
+      border-radius: 6px;
+    }
+    #pageC button {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 1rem;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page A – Starting page (original tab) -->
+  <div id="pageA" class="page active">
+    <div class="card">
+      <h1>Page A – Trusted Site</h1>
+      <p>Click the link below to open an "interesting article" in a new tab.</p>
+      
+      <div class="link" onclick="simulateNewTab()">Read the interesting article → opens in new tab</div>
+      
+      <div class="warning">
+        After clicking, <strong>watch this area</strong> — it will be silently redirected to Page C (fake login simulation).
+      </div>
+      
+      <div class="note">
+        <strong>Educational demo only.</strong><br>
+        This simulates what happens when <code>target="_blank"</code> is used <strong>without</strong> <code>rel="noopener noreferrer"</code>.<br>
+        The new "tab" uses <code>window.opener</code> to redirect the original page.
+      </div>
+    </div>
+  </div>
+
+  <!-- Page B – What opens in the "new tab" -->
+  <div id="pageB" class="page">
+    <div class="card">
+      <h1>Page B – Article</h1>
+      <p>Reading very useful content... please wait just a second...</p>
+      
+      <div class="note">
+        (In a real attack this page would look legitimate while silently attacking the opener.)
+      </div>
+    </div>
+  </div>
+
+  <!-- Page C – Malicious / phishing simulation (where original tab gets redirected) -->
+  <div id="pageC" class="page">
+    <div class="card">
+      <h1>Session Expired – Please Sign In</h1>
+      <p>For security reasons, please sign in again to continue.</p>
+      
+      <form>
+        <input type="email" placeholder="Email or username" required />
+        <input type="password" placeholder="Password" required />
+        <button type="button">Sign In</button>
+      </form>
+      
+      <div class="note" style="margin-top: 2.5rem;">
+        <strong>This is only a demo phishing simulation</strong> — never enter real credentials here!
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simulate "new tab" by just showing Page B in this same window
+    function simulateNewTab() {
+      // 1. "Open" Page B (show it)
+      document.getElementById('pageA').classList.remove('active');
+      document.getElementById('pageB').classList.add('active');
+
+      // 2. Immediately perform the attack: redirect "original tab" (Page A area) to Page C
+      setTimeout(() => {
+        if (confirm("In a real scenario the original tab would be redirected silently.\n\nClick OK to simulate the redirect now.")) {
+          document.getElementById('pageB').classList.remove('active');
+          document.getElementById('pageC').classList.add('active');
+        }
+      }, 800); // small delay to mimic real timing
+    }
+
+    // Optional: Reset to Page A (for testing multiple times)
+    function resetDemo() {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('pageA').classList.add('active');
+    }
+  </script>
+
+  <footer style="text-align:center; padding:1.5rem; color:#95a5a6; font-size:0.9rem;">
+    Lab 5 – Tabnapping Scenario A Demo • Refresh page or click outside to restart
+  </footer>
+
+</body>
+</html>
