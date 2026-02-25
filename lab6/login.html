@@ -1,23 +1,116 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-</head>
-<body>
-    <div class="Login-container">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 360px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #673ab7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5e35b1;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="login-container">
         <h2>Login</h2>
-        <label for ="username">Username:</label>
-        <input type="text" id="username" placeholder="Enter username">
-        <br>
-        <label>Password</label>
-        <input type="password" id="password" placeholder="Enter password"
+        
+        <label for="username">Username</label>
+        <input id="username" placeholder="Enter username">
+
+        <label for="password">Password</label>
+
+        <input id="password" type="password" placeholder="Enter password">
+
+        <button onclick="handleLogin()">Login</button>
     </div>
 
+    <script>
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
 
-    
-    
+        function handleLogin() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!username) {
+                alert("Please enter username");
+                return;
+            }
+
+        
+            console.log("Login attempt:");
+            console.log("Username:", username);
+            console.log("Password:", password);
+           
+            setCookie("username", username, 7);
+
+            window.location.href = "http://127.0.0.1:5500/Dev1/Registration/register.html";
+        }
+    </script>
+
 </body>
 </html>
