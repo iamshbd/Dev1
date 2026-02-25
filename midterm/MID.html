@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PulsePoint CIS</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
+    @media (max-width: 1023px) {
+      .sidebar-hidden {
+        transform: translateX(-100%);
+      }
+    }
+  </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+
+
+  <div id="view-login" class="min-h-screen flex flex-col">
+    <header class="bg-primary text-primary-content p-4 text-center">
+      <h1 class="text-2xl font-bold">PulsePoint Clinical Information System</h1>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+      <div class="card w-full max-w-md bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-center">Login</h2>
+
+          <form id="loginForm" class="space-y-4">
+            <div>
+              <label class="label">
+                <span class="label-text">Practitioner ID</span>
+              </label>
+              <input type="text" class="input input-bordered w-full" required />
+            </div>
+
+            <div>
+              <label class="label">
+                <span class="label-text">Password</span>
+              </label>
+              <div class="relative">
+                <input id="password" type="password" class="input input-bordered w-full pr-10" 
+
+
+                       oninput="checkPasswordStrength()" required />
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 btn btn-ghost btn-xs"
+                        onclick="togglePasswordVisibility()">Show</button>
+              </div>
+              <p id="password-feedback" class="mt-2 text-sm font-medium"></p>
+            </div>
+
+            <div>
+              <label class="label">
+                <span class="label-text">Role</span>
+              </label>
+              <select id="role" class="select select-bordered w-full" required>
+                <option value="Nurse">Nurse</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+
+            <div class="card-actions justify-end mt-6">
+              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-primary text-primary-content p-4 text-center mt-auto">
+      <p>© 2026 PulsePoint CIS</p>
+    </footer>
+  </div>
+
+
+
+  <div id="view-app" class="hidden flex min-h-screen">
+    
+    <aside id="sidebar" class="sidebar w-64 bg-primary text-primary-content flex-shrink-0 h-screen fixed lg:relative z-30">
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-6">PulsePoint</h2>
+        <ul class="menu menu-vertical gap-2">
+          <li><a id="nav-dashboard" class="active">Dashboard</a></li>
+          <li><button onclick="logout()">Logout</button></li>
+        </ul>
+      </div>
+    </aside>
+
+    <
+    <div class="flex-1 flex flex-col lg:ml-64">
+      <header class="bg-primary text-primary-content p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="btn btn-ghost lg:hidden" onclick="toggleSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <h1 id="page-title" class="text-xl font-bold">Dashboard</h1>
+        </div>
+      </header>
+
+      <main class="p-6 flex-grow">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+              <h2 class="card-title text-error">Patient Alerts</h2>
+
+              <p class="text-3xl font-bold">5</p>
+              <p class="text-sm opacity-70">patients needing urgent care</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+              <h2 class="card-title text-success">Bed Availability</h2>
+              <p class="text-3xl font-bold">12</p>
+              <p class="text-sm opacity-70">beds currently available</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+              <h2 class="card-title text-warning">Medicine Orders</h2>
+              <p class="text-3xl font-bold">8</p>
+              <p class="text-sm opacity-70">prescriptions waiting</p>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+              <h2 class="card-title">Database Status</h2>
+              <p class="text-lg font-semibold">Last backup</p>
+              <p>Feb 25, 2026 08:00 AM</p>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="admin-only" class="hidden mt-8">
+          <h2 class="text-2xl font-bold mb-4">Staff List</h2>
+          <div class="bg-base-100 rounded-lg shadow p-6">
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Dr. John Dara – Cardiology</li>
+              <li>Nurse Lisa Seng – ICU</li>
+
+              <li>Admin Bondeth – IT</li>
+              <li>Dr. Dora Vy – Pediatrics</li>
+            </ul>
+          </div>
+
+
+        </div>
+      </main>
+
+      <footer class="bg-base-300 text-center p-4 mt-auto">
+        <p>© 2026 PulsePoint Clinical Information System</p>
+      </footer>
+    </div>
+  </div>
+
+  
+  <div id="view-error" class="hidden min-h-screen flex flex-col">
+    <header class="bg-primary text-primary-content p-4 text-center">
+      <h1 class="text-2xl font-bold">PulsePoint CIS</h1>
+    </header>
+    <main class="flex-grow flex items-center justify-center p-4">
+      <div class="card w-full max-w-md bg-base-100 shadow-xl text-center">
+
+        <div class="card-body">
+          <h2 class="card-title text-error justify-center text-3xl mb-4">Access Denied</h2>
+          <p class="mb-6">You do not have permission to view this page.</p>
+          <button onclick="logout()" class="btn btn-primary">Return to Login</button>
+        </div>
+      </div>
+    </main>
+    <footer class="bg-primary text-primary-content p-4 text-center mt-auto">
+      <p>© 2026 PulsePoint CIS</p>
+    </footer>
+  </div>
+
+  <script>
+    
+    function setCookie(name, value, days = 1) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    function deleteCookie(name) {
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+    }
+
+    
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const btn = input.nextElementSibling;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+      }
+    }
+
+    function checkPasswordStrength() {
+      const pw = document.getElementById('password').value;
+      const feedback = document.getElementById('password-feedback');
+
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[!@#$%^&*(),.?":{}|<>]/.test(pw)) score++;
+
+      if (score === 3) {
+        feedback.textContent = 'Strong';
+        feedback.className = 'text-success';
+      } else if (score === 2) {
+        feedback.textContent = 'Medium';
+        
+        feedback.className = 'text-warning';
+      } else {
+        feedback.textContent = 'Weak';
+        feedback.className = 'text-error';
+      }
+    }
+
+    
+    function showView(viewId) {
+      document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('sidebar-hidden');
+    }
+
+    
+    function checkAuth() {
+      const role = getCookie('active_role');
+      if (!role) {
+        showView('view-login');
+        return null;
+      }
+
+      if (role !== 'Nurse' && role !== 'Admin') {
+        showView('view-error');
+        return null;
+      }
+
+      showView('view-app');
+
+      
+      document.getElementById('admin-only').classList.toggle('hidden', role !== 'Admin');
+
+      
+      document.getElementById('page-title').textContent = role + ' Dashboard';
+
+      return role;
+    }
+
+    function login(event) {
+      event.preventDefault();
+      const pw = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[!@#$%^&*(),.?":{}|<>]/.test(pw)) score++;
+
+      if (score < 3) {
+        alert('Password must meet all strength requirements.');
+        return;
+      }
+
+      setCookie('active_role', role, 1);
+      checkAuth();
+    }
+
+    function logout() {
+      deleteCookie('active_role');
+      showView('view-login');
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      checkAuth();
+
+      document.getElementById('loginForm').addEventListener('submit', login);
+
+  
+      document.getElementById('nav-dashboard').addEventListener('click', (e) => {
+        if (window.innerWidth < 1024) toggleSidebar();
+      });
+    });
+  </script>
+</body>
+</html>
