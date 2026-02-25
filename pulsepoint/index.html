@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PulsePoint CIS - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+  <style>/* little polish for demo */</style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <header class="p-4 bg-white shadow-sm">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <h1 class="text-lg font-semibold">PulsePoint CIS</h1>
+      <div class="text-sm muted">Regional Hospital Dashboard</div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <section class="bg-white p-6 rounded-lg shadow-sm">
+      <h2 class="text-xl font-bold mb-4">Sign in</h2>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">Practitioner ID</label>
+          <input id="practId" required class="mt-1 p-2 border rounded w-full" placeholder="e.g. NURSE-1234">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium">Password</label>
+          <div class="mt-1 flex">
+            <input id="password" type="password" class="p-2 border rounded-l w-full" placeholder="••••••••">
+            <button id="togglePw" type="button" class="p-2 bg-slate-100 border-l rounded-r">Show</button>
+          </div>
+          <div id="pwFeedback" class="mt-2 text-sm muted">Enter a secure password</div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium">Role</label>
+          <select id="role" class="mt-1 p-2 border rounded w-full">
+            <option>Anonymous</option>
+            <option>Nurse</option>
+            <option>Admin</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <button class="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Login</button>
+          <button id="resetBtn" type="button" class="text-sm text-red-600">Clear session & reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="mt-6">
+      <h3 class="text-lg font-semibold mb-2">Preview: Dashboard Shell</h3>
+      <div class="flex gap-6">
+        <aside class="sidebar-fixed hidden md:block">
+          <div class="text-xl font-bold mb-4">Menu</div>
+          <nav class="space-y-2">
+            <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Overview</a>
+            <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Patients</a>
+            <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Orders</a>
+            <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Administration</a>
+          </nav>
+        </aside>
+
+        <div class="content-offset flex-1">
+          <main class="card p-4">
+            <div class="card-grid">
+              <div class="card">
+                <div class="muted">Patient alerts</div>
+                <div class="text-2xl font-bold">7</div>
+              </div>
+              <div class="card">
+                <div class="muted">Bed availability</div>
+                <div class="text-2xl font-bold">12</div>
+              </div>
+              <div class="card">
+                <div class="muted">Medicine orders</div>
+                <div class="text-2xl font-bold">18</div>
+              </div>
+              <div class="card">
+                <div class="muted">Database status</div>
+                <div class="text-sm muted">Last backup:</div>
+                <div class="text-2xl font-bold">2026-02-24 23:12</div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="p-4 text-center muted">© Regional Hospital</footer>
+
+  <script>
+    // Auto-login: if active_role exists, redirect immediately
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const role = window.PP.getCookie('active_role');
+      if (role){
+        if (role === 'Admin') window.location.replace('admin.html');
+        else if (role === 'Nurse') window.location.replace('nurse.html');
+        else window.location.replace('index.html');
+        return;
+      }
+
+      const pw = document.getElementById('password');
+      const fb = document.getElementById('pwFeedback');
+      const toggle = document.getElementById('togglePw');
+      const form = document.getElementById('loginForm');
+
+      pw.addEventListener('input', ()=>{
+        const n = window.PP.passwordRulesCount(pw.value);
+        if (n <= 1){ fb.textContent = 'Weak'; fb.style.color = 'red'; }
+        else if (n === 2){ fb.textContent = 'Medium'; fb.style.color = 'orange'; }
+        else { fb.textContent = 'Strong'; fb.style.color = 'green'; }
+      });
+
+      toggle.addEventListener('click', ()=>{
+        if (pw.type === 'password'){ pw.type = 'text'; toggle.textContent = 'Hide'; }
+        else { pw.type = 'password'; toggle.textContent = 'Show'; }
+      });
+
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const role = document.getElementById('role').value;
+        const id = document.getElementById('practId').value.trim();
+        // Minimal validation: id and password rules
+        if (!id){ alert('Enter practitioner ID'); return; }
+        const rules = window.PP.passwordRulesCount(pw.value);
+        if (rules < 1){ alert('Password does not meet minimum requirements'); return; }
+
+        // Save role into cookie and redirect accordingly
+        window.PP.setCookie('active_role', role, 1);
+        if (role === 'Admin') window.location.replace('admin.html');
+        else if (role === 'Nurse') window.location.replace('nurse.html');
+        else window.location.replace('index.html');
+      });
+
+      document.getElementById('resetBtn').addEventListener('click', ()=>{
+        window.PP.deleteCookie('active_role');
+        alert('Session cleared');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PulsePoint CIS - Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <header class="p-4 bg-white shadow-sm flex justify-between items-center">
+    <div class="max-w-5xl mx-auto w-full flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="text-lg font-semibold">PulsePoint CIS</div>
+        <div class="muted">Admin view</div>
+      </div>
+      <div><button id="logoutBtn" class="px-3 py-1 bg-red-600 text-white rounded">Logout</button></div>
+    </div>
+  </header>
+
+  <div class="flex">
+    <aside class="sidebar-fixed hidden md:block">
+      <div class="text-xl font-bold mb-4">Admin</div>
+      <nav class="space-y-2">
+        <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Users</a>
+        <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Backups</a>
+        <a class="block py-2 px-2 rounded hover:bg-slate-700/10" href="#">Logs</a>
+      </nav>
+    </aside>
+
+    <main class="content-offset p-6 flex-1">
+      <section class="card">
+        <h2 class="text-xl font-bold mb-4">Admin Dashboard</h2>
+        <div class="card-grid">
+          <div class="card">
+            <div class="muted">Patient alerts</div>
+            <div class="text-2xl font-bold">7</div>
+          </div>
+          <div class="card">
+            <div class="muted">Bed availability</div>
+            <div class="text-2xl font-bold">12</div>
+          </div>
+          <div class="card">
+            <div class="muted">Medicine orders</div>
+            <div class="text-2xl font-bold">18</div>
+          </div>
+          <div class="card">
+            <div class="muted">Database status</div>
+            <div class="text-2xl font-bold">2026-02-24 23:12</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-6 card">
+        <h3 class="font-semibold">Staff Directory (Admin only)</h3>
+        <p class="muted">Full staff list visible to Admin.</p>
+        <ul class="mt-3">
+          <li>Dr. Alice Smith — Chief of Medicine</li>
+          <li>Dr. Bob Chan — Surgery</li>
+          <li>Nurse Linda Lee — Head Nurse</li>
+          <li>Pharmacist Miguel — Pharmacy Manager</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      if (!window.PP.checkAuth('Admin')) return; // will redirect if unauthenticated or insufficient role
+      window.PP.attachLogout('logoutBtn');
+    });
+  </script>
+</body>
+</html>
